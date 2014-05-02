@@ -1,8 +1,8 @@
 package log
 
-import(
-	"testing"
+import (
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestLogger(t *testing.T) {
@@ -51,25 +51,25 @@ func TestLevels(t *testing.T) {
 	assert.Equal(t, logger.Enabled[TRACE], false)
 	assert.Equal(t, logger.Enabled[DEBUG], false)
 	assert.Equal(t, logger.Enabled[WARN], false)
-	assert.Equal(t, logger.Enabled[ERROR], true)	
+	assert.Equal(t, logger.Enabled[ERROR], true)
 	assert.Equal(t, logger.Enabled[INFO], true)
 	assert.Equal(t, logger.Enabled[FATAL], true)
 }
 
 func TestUnwrap(t *testing.T) {
-	args := Unwrap(func(args ...interface{})[]interface{}{
+	args := Unwrap(func(args ...interface{}) []interface{} {
 		return []interface{}{
 			"example log message",
 			"example args",
 		}
-	});
+	})
 	assert.NotNil(t, args)
 	assert.Equal(t, len(args), 2)
 	assert.Equal(t, args[0], "example log message")
 	assert.Equal(t, args[1], "example args")
 
 	var passedArgs []interface{}
-	args = Unwrap(func(args ...interface{})[]interface{}{
+	args = Unwrap(func(args ...interface{}) []interface{} {
 		passedArgs = args
 		return []interface{}{
 			"example log message",

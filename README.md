@@ -23,8 +23,11 @@ log.Debug("Example log message: %s", "example arg")
 log.Debug(func(i ...interface{}){[]interface{}{"Example log message: %s", "example arg"}})
 ```
 
-The default log level is DEBUG. You can't (currently) change the default log
-level on the global logger.
+You can also get the logger instance:
+```
+logger := log.Global()
+logger.Debug("Yey!")
+```
 
 You can also create a local logger object:
 
@@ -32,10 +35,20 @@ You can also create a local logger object:
 logger := log.New(log.DEBUG)
 ```
 
-You can then set the log level:
+### Log levels
+
+The default log level is DEBUG.
+
+To get the current log level:
 
 ```
-logger.Level = log.TRACE
+logger.Level()
+```
+
+You can set the log level:
+
+```
+logger.SetLevel(log.TRACE)
 ```
 
 ### Contributing
