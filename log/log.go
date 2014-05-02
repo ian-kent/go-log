@@ -53,14 +53,14 @@ func Log(level LogLevel, params ...interface{}) {
 	if logger == nil { logger = New(DEBUG) }
 	logger.Log(level, params...)
 }
-func Debug(params ...interface{}) {	Log(DEBUG, params...) }
-func Info(params ...interface{}) { Log(INFO, params...) }
-func Warn(params ...interface{}) { Log(WARN, params...) }
-func Error(params ...interface{}) {	Log(ERROR, params...) }
-func Trace(params ...interface{}) {	Log(TRACE, params...) }
-func Printf(params ...interface{}) { Log(INFO, params...) }
-func Println(params ...interface{}) { Log(INFO, params...) }
-func Fatalf(params ...interface{}) { Log(FATAL, params...) }
+func Debug(params ...interface{}) {	Log(DEBUG, Unwrap(params...)...) }
+func Info(params ...interface{}) { Log(INFO, Unwrap(params...)...) }
+func Warn(params ...interface{}) { Log(WARN, Unwrap(params...)...) }
+func Error(params ...interface{}) {	Log(ERROR, Unwrap(params...)...) }
+func Trace(params ...interface{}) {	Log(TRACE, Unwrap(params...)...) }
+func Printf(params ...interface{}) { Log(INFO, Unwrap(params...)...) }
+func Println(params ...interface{}) { Log(INFO, Unwrap(params...)...) }
+func Fatalf(params ...interface{}) { Log(FATAL, Unwrap(params...)...) }
 
 func (l *Logger) Write(level LogLevel, message string, params ...interface{}) { 
 	Write(level, message, params...) 
