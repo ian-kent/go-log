@@ -44,7 +44,7 @@ func Unwrap(args ...interface{}) []interface{} {
 	head := args[0]
 	switch head.(type) {
 	case func(...interface{})[]interface{}:
-		args = head.(func(...interface{})[]interface{})(args[1:]...)
+		args = Unwrap(head.(func(...interface{})[]interface{})(args[1:]...)...)
 	}
 	return args
 }
