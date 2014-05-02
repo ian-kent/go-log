@@ -8,7 +8,52 @@ import(
 func TestLogger(t *testing.T) {
 	logger := New(DEBUG)
 	assert.NotNil(t, logger)
-	assert.Equal(t, logger.Level, DEBUG)
+	assert.Equal(t, logger.Level(), DEBUG)
+}
+
+func TestGlobal(t *testing.T) {
+	logger := Global()
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), DEBUG)
+}
+
+func TestLevels(t *testing.T) {
+	logger := Global()
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), DEBUG)
+	assert.Equal(t, logger.Enabled[TRACE], false)
+	assert.Equal(t, logger.Enabled[DEBUG], true)
+	assert.Equal(t, logger.Enabled[WARN], true)
+	assert.Equal(t, logger.Enabled[ERROR], true)
+	assert.Equal(t, logger.Enabled[INFO], true)
+	assert.Equal(t, logger.Enabled[FATAL], true)
+
+	logger.SetLevel(TRACE)
+	assert.Equal(t, logger.Level(), TRACE)
+	assert.Equal(t, logger.Enabled[TRACE], true)
+	assert.Equal(t, logger.Enabled[DEBUG], true)
+	assert.Equal(t, logger.Enabled[WARN], true)
+	assert.Equal(t, logger.Enabled[ERROR], true)
+	assert.Equal(t, logger.Enabled[INFO], true)
+	assert.Equal(t, logger.Enabled[FATAL], true)
+
+	logger.SetLevel(FATAL)
+	assert.Equal(t, logger.Level(), FATAL)
+	assert.Equal(t, logger.Enabled[TRACE], false)
+	assert.Equal(t, logger.Enabled[DEBUG], false)
+	assert.Equal(t, logger.Enabled[WARN], false)
+	assert.Equal(t, logger.Enabled[ERROR], false)
+	assert.Equal(t, logger.Enabled[INFO], false)
+	assert.Equal(t, logger.Enabled[FATAL], true)
+
+	logger.SetLevel(INFO)
+	assert.Equal(t, logger.Level(), INFO)
+	assert.Equal(t, logger.Enabled[TRACE], false)
+	assert.Equal(t, logger.Enabled[DEBUG], false)
+	assert.Equal(t, logger.Enabled[WARN], false)
+	assert.Equal(t, logger.Enabled[ERROR], true)	
+	assert.Equal(t, logger.Enabled[INFO], true)
+	assert.Equal(t, logger.Enabled[FATAL], true)
 }
 
 func TestUnwrap(t *testing.T) {
@@ -54,10 +99,6 @@ func TestWrite(t *testing.T) {
 }
 
 func TestLog(t *testing.T) {
-
-}
-
-func TestLevels(t *testing.T) {
 
 }
 

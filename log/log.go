@@ -6,17 +6,18 @@ import(
 )
 
 type Logger struct {
-	Level LogLevel
+	level LogLevel
+	Enabled map[LogLevel]bool
 }
 
 type LogLevel int
 const (
-	TRACE = iota
-	DEBUG
-	WARN
-	INFO
+	FATAL = iota
 	ERROR
-	FATAL
+	INFO
+	WARN
+	DEBUG
+	TRACE
 )
 var levels = map[LogLevel]string{
 	TRACE: "TRACE",
@@ -29,10 +30,18 @@ var levels = map[LogLevel]string{
 
 var logger *Logger
 
+func Global() *Logger {
+	if logger == nil { logger = New(DEBUG) }
+	return logger
+}
+
 func New(level LogLevel) *Logger {
-	return &Logger{
-		Level: level,
+	logger := &Logger{
+		level: level,
+		Enabled: make(map[LogLevel]bool),
 	}
+	logger.SetLevel(level)
+	return logger
 }
 
 func Write(level LogLevel, message string, params ...interface{}) {
@@ -49,9 +58,8 @@ func Unwrap(args ...interface{}) []interface{} {
 	return args
 }
 
-func Log(level LogLevel, params ...interface{}) {
-	if logger == nil { logger = New(DEBUG) }
-	logger.Log(level, params...)
+func Log(level LogLevel, params ...interface{}) {	
+	Global().Log(level, params...)
 }
 func Debug(params ...interface{}) {	Log(DEBUG, Unwrap(params...)...) }
 func Info(params ...interface{}) { Log(INFO, Unwrap(params...)...) }
@@ -67,6 +75,19 @@ func (l *Logger) Write(level LogLevel, message string, params ...interface{}) {
 }
 func (l *Logger) Log(level LogLevel, params ...interface{}) { 
 	l.Write(level, params[0].(string), params[1:]...) 
+}
+func (l *Logger) Level() LogLevel {
+	return l.level;
+}
+func (l *Logger) SetLevel(level LogLevel) {
+	l.level = level
+	for k, _ := range levels {
+		if k <= level {
+			l.Enabled[k] = true
+		} else {
+			l.Enabled[k] = false
+		}
+	}
 }
 func (l *Logger) Debug(params ...interface{}) { l.Log(DEBUG, Unwrap(params...)...) }
 func (l *Logger) Info(params ...interface{}) { l.Log(INFO, Unwrap(params...)...) }
