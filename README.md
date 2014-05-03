@@ -1,6 +1,8 @@
 Go-Log
 ======
 
+[![Build Status](https://travis-ci.org/ian-kent/go-log.svg?branch=master)](https://travis-ci.org/ian-kent/go-log)
+
 A logger, for Go!
 
 ### Getting started
