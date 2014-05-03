@@ -65,19 +65,22 @@ func Unwrap(args ...interface{}) []interface{} {
 func Log(level LogLevel, params ...interface{}) {
 	Global().Log(level, params...)
 }
-func Debug(params ...interface{})   { Log(DEBUG, Unwrap(params...)...) }
-func Info(params ...interface{})    { Log(INFO, Unwrap(params...)...) }
-func Warn(params ...interface{})    { Log(WARN, Unwrap(params...)...) }
-func Error(params ...interface{})   { Log(ERROR, Unwrap(params...)...) }
-func Trace(params ...interface{})   { Log(TRACE, Unwrap(params...)...) }
-func Printf(params ...interface{})  { Log(INFO, Unwrap(params...)...) }
-func Println(params ...interface{}) { Log(INFO, Unwrap(params...)...) }
-func Fatalf(params ...interface{})  { Log(FATAL, Unwrap(params...)...) }
+
+func Debug(params ...interface{})   { Log(DEBUG, params...) }
+func Info(params ...interface{})    { Log(INFO, params...) }
+func Warn(params ...interface{})    { Log(WARN, params...) }
+func Error(params ...interface{})   { Log(ERROR, params...) }
+func Trace(params ...interface{})   { Log(TRACE, params...) }
+func Printf(params ...interface{})  { Log(INFO, params...) }
+func Println(params ...interface{}) { Log(INFO, params...) }
+func Fatalf(params ...interface{})  { Log(FATAL, params...) }
 
 func (l *Logger) Write(level LogLevel, message string, params ...interface{}) {
 	Write(level, message, params...)
 }
 func (l *Logger) Log(level LogLevel, params ...interface{}) {
+	if !l.Enabled[level] { return }
+	params = Unwrap(params...)
 	l.Write(level, params[0].(string), params[1:]...)
 }
 func (l *Logger) Level() LogLevel {
@@ -93,11 +96,12 @@ func (l *Logger) SetLevel(level LogLevel) {
 		}
 	}
 }
-func (l *Logger) Debug(params ...interface{})   { l.Log(DEBUG, Unwrap(params...)...) }
-func (l *Logger) Info(params ...interface{})    { l.Log(INFO, Unwrap(params...)...) }
-func (l *Logger) Warn(params ...interface{})    { l.Log(WARN, Unwrap(params...)...) }
-func (l *Logger) Error(params ...interface{})   { l.Log(ERROR, Unwrap(params...)...) }
-func (l *Logger) Trace(params ...interface{})   { l.Log(TRACE, Unwrap(params...)...) }
-func (l *Logger) Printf(params ...interface{})  { l.Log(INFO, Unwrap(params...)...) }
-func (l *Logger) Println(params ...interface{}) { l.Log(INFO, Unwrap(params...)...) }
-func (l *Logger) Fatalf(params ...interface{})  { l.Log(FATAL, Unwrap(params...)...) }
+
+func (l *Logger) Debug(params ...interface{})   { l.Log(DEBUG, params...) }
+func (l *Logger) Info(params ...interface{})    { l.Log(INFO, params...) }
+func (l *Logger) Warn(params ...interface{})    { l.Log(WARN, params...) }
+func (l *Logger) Error(params ...interface{})   { l.Log(ERROR, params...) }
+func (l *Logger) Trace(params ...interface{})   { l.Log(TRACE, params...) }
+func (l *Logger) Printf(params ...interface{})  { l.Log(INFO, params...) }
+func (l *Logger) Println(params ...interface{}) { l.Log(INFO, params...) }
+func (l *Logger) Fatalf(params ...interface{})  { l.Log(FATAL, params...) }
