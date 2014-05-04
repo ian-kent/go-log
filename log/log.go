@@ -48,8 +48,14 @@ func New(level LogLevel) *Logger {
 	return logger
 }
 
+func compose(level LogLevel, args ...interface{}) (string, []interface{}) {
+	msg := "[%s] [%s] " + args[0].(string) + "\n"
+	args = args[1:]
+	return msg, append([]interface{}{time.Now(), levels[level]}, args...)
+}
+
 func write(level LogLevel, params ...interface{}) {
-	msg, args := prepare(level, params)
+	msg, args := compose(level, params)
 	fmt.Printf(msg, args...)
 }
 
@@ -66,12 +72,6 @@ func unwrap(args ...interface{}) []interface{} {
 		args = unwrap(head.(func(...interface{}) []interface{})(args[1:]...)...)
 	}
 	return args
-}
-
-func prepare(level LogLevel, args ...interface{}) (string, []interface{}) {
-	msg := "[%s] [%s] " + args[0].(string) + "\n"
-	args = args[1:]
-	return msg, append([]interface{}{time.Now(), levels[level]}, args...)
 }
 
 func Log(level LogLevel, params ...interface{}) {

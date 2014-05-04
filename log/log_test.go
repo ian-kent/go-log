@@ -119,6 +119,16 @@ func TestUnwrap(t *testing.T) {
 	assert.Equal(t, args[2], "more example args")
 }
 
+func TestCompose(t *testing.T) {
+	msg, args := compose(DEBUG, "test message", "example arg")
+	assert.NotNil(t, msg)
+	assert.Equal(t, msg, "[%s] [%s] test message\n")
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[1], "DEBUG")
+	assert.Equal(t, args[2], "example arg")
+}
+
 func TestWrite(t *testing.T) {
 
 }
