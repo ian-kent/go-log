@@ -48,20 +48,26 @@ func New(level LogLevel) *Logger {
 	return logger
 }
 
-func Write(level LogLevel, message string, params ...interface{}) {
-	p := append([]interface{}{time.Now(), levels[level]}, params...)
-	fmt.Printf("[%s] [%s] "+message+"\n", p...)
+func write(level LogLevel, params ...interface{}) {
+	msg, args := prepare(level, params)
+	fmt.Printf(msg, args...)
 }
 
-func Unwrap(args ...interface{}) []interface{} {
+func unwrap(args ...interface{}) []interface{} {
 	head := args[0]
 	switch head.(type) {
 	case func() []interface{}:
-		args = Unwrap(head.(func() []interface{})()...)
+		args = unwrap(head.(func() []interface{})()...)
 	case func(...interface{}) []interface{}:
-		args = Unwrap(head.(func(...interface{}) []interface{})(args[1:]...)...)
+		args = unwrap(head.(func(...interface{}) []interface{})(args[1:]...)...)
 	}
 	return args
+}
+
+func prepare(level LogLevel, args ...interface{}) (string, []interface{}) {
+	msg := "[%s] [%s] " + args[0].(string) + "\n"
+	args = args[1:]
+	return msg, append([]interface{}{time.Now(), levels[level]}, args...)
 }
 
 func Log(level LogLevel, params ...interface{}) {
@@ -77,13 +83,12 @@ func Printf(params ...interface{})  { Log(INFO, params...) }
 func Println(params ...interface{}) { Log(INFO, params...) }
 func Fatalf(params ...interface{})  { Log(FATAL, params...) }
 
-func (l *Logger) Write(level LogLevel, message string, params ...interface{}) {
-	Write(level, message, params...)
+func (l *Logger) write(level LogLevel, params ...interface{}) {
+	write(level, params...)
 }
 func (l *Logger) Log(level LogLevel, params ...interface{}) {
 	if !l.Enabled[level] { return }
-	params = Unwrap(params...)
-	l.Write(level, params[0].(string), params[1:]...)
+	l.write(level, unwrap(params...)...)
 }
 func (l *Logger) Level() LogLevel {
 	return l.level
