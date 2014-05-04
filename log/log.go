@@ -14,6 +14,10 @@ type Logger struct {
 
 var logger *Logger
 
+func Level(level string) levels.LogLevel {
+	return levels.StringToLogLevels[level]
+}
+
 func Global() *Logger {
 	if logger == nil {
 		logger = New(levels.DEBUG, ".")
@@ -34,7 +38,7 @@ func New(level levels.LogLevel, name string) *Logger {
 func compose(level levels.LogLevel, args ...interface{}) (string, []interface{}) {
 	msg := "[%s] [%s] " + args[0].(string) + "\n"
 	args = args[1:]
-	return msg, append([]interface{}{time.Now(), levels.LogLevels[level]}, args...)
+	return msg, append([]interface{}{time.Now(), levels.LogLevelsToString[level]}, args...)
 }
 
 func write(level levels.LogLevel, params ...interface{}) {
@@ -87,7 +91,7 @@ func (l *Logger) Name() string {
 }
 func (l *Logger) SetLevel(level levels.LogLevel) {
 	l.level = level
-	for k, _ := range levels.LogLevels {
+	for k, _ := range levels.LogLevelsToString {
 		if k <= level {
 			l.Enabled[k] = true
 		} else {

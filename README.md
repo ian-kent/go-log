@@ -35,10 +35,7 @@ logger.Debug("Yey!")
 You can also create a local logger object:
 
 ```
-import(
-	"github.com/ian-kent/go-log/levels"
-)
-logger := log.New(levels.DEBUG)
+logger := log.New(log.Level("DEBUG"))
 ```
 
 ### Log levels
@@ -54,10 +51,7 @@ level := logger.Level()
 You can set the log level:
 
 ```
-import(
-	"github.com/ian-kent/go-log/levels"
-)
-logger.SetLevel(levels.TRACE)
+logger.SetLevel(log.Level("TRACE"))
 ```
 
 ### Contributing

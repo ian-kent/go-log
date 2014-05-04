@@ -1,15 +1,14 @@
 package log
 
 import (
-	"github.com/ian-kent/go-log/levels"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestLogger(t *testing.T) {
-	logger := New(levels.DEBUG, ".")
+	logger := New(Level("DEBUG"), ".")
 	assert.NotNil(t, logger)
-	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.Equal(t, logger.Level(), Level("DEBUG"))
 	assert.NotNil(t, logger.Name())
 	assert.Equal(t, logger.Name(), ".")
 }
@@ -17,46 +16,46 @@ func TestLogger(t *testing.T) {
 func TestGlobal(t *testing.T) {
 	logger := Global()
 	assert.NotNil(t, logger)
-	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.Equal(t, logger.Level(), Level("DEBUG"))
 }
 
 func TestLevels(t *testing.T) {
 	logger := Global()
 	assert.NotNil(t, logger)
-	assert.Equal(t, logger.Level(), levels.DEBUG)
-	assert.Equal(t, logger.Enabled[levels.TRACE], false)
-	assert.Equal(t, logger.Enabled[levels.DEBUG], true)
-	assert.Equal(t, logger.Enabled[levels.WARN], true)
-	assert.Equal(t, logger.Enabled[levels.ERROR], true)
-	assert.Equal(t, logger.Enabled[levels.INFO], true)
-	assert.Equal(t, logger.Enabled[levels.FATAL], true)
+	assert.Equal(t, logger.Level(), Level("DEBUG"))
+	assert.Equal(t, logger.Enabled[Level("TRACE")], false)
+	assert.Equal(t, logger.Enabled[Level("DEBUG")], true)
+	assert.Equal(t, logger.Enabled[Level("WARN")], true)
+	assert.Equal(t, logger.Enabled[Level("ERROR")], true)
+	assert.Equal(t, logger.Enabled[Level("INFO")], true)
+	assert.Equal(t, logger.Enabled[Level("FATAL")], true)
 
-	logger.SetLevel(levels.TRACE)
-	assert.Equal(t, logger.Level(), levels.TRACE)
-	assert.Equal(t, logger.Enabled[levels.TRACE], true)
-	assert.Equal(t, logger.Enabled[levels.DEBUG], true)
-	assert.Equal(t, logger.Enabled[levels.WARN], true)
-	assert.Equal(t, logger.Enabled[levels.ERROR], true)
-	assert.Equal(t, logger.Enabled[levels.INFO], true)
-	assert.Equal(t, logger.Enabled[levels.FATAL], true)
+	logger.SetLevel(Level("TRACE"))
+	assert.Equal(t, logger.Level(), Level("TRACE"))
+	assert.Equal(t, logger.Enabled[Level("TRACE")], true)
+	assert.Equal(t, logger.Enabled[Level("DEBUG")], true)
+	assert.Equal(t, logger.Enabled[Level("WARN")], true)
+	assert.Equal(t, logger.Enabled[Level("ERROR")], true)
+	assert.Equal(t, logger.Enabled[Level("INFO")], true)
+	assert.Equal(t, logger.Enabled[Level("FATAL")], true)
 
-	logger.SetLevel(levels.FATAL)
-	assert.Equal(t, logger.Level(), levels.FATAL)
-	assert.Equal(t, logger.Enabled[levels.TRACE], false)
-	assert.Equal(t, logger.Enabled[levels.DEBUG], false)
-	assert.Equal(t, logger.Enabled[levels.WARN], false)
-	assert.Equal(t, logger.Enabled[levels.ERROR], false)
-	assert.Equal(t, logger.Enabled[levels.INFO], false)
-	assert.Equal(t, logger.Enabled[levels.FATAL], true)
+	logger.SetLevel(Level("FATAL"))
+	assert.Equal(t, logger.Level(), Level("FATAL"))
+	assert.Equal(t, logger.Enabled[Level("TRACE")], false)
+	assert.Equal(t, logger.Enabled[Level("DEBUG")], false)
+	assert.Equal(t, logger.Enabled[Level("WARN")], false)
+	assert.Equal(t, logger.Enabled[Level("ERROR")], false)
+	assert.Equal(t, logger.Enabled[Level("INFO")], false)
+	assert.Equal(t, logger.Enabled[Level("FATAL")], true)
 
-	logger.SetLevel(levels.INFO)
-	assert.Equal(t, logger.Level(), levels.INFO)
-	assert.Equal(t, logger.Enabled[levels.TRACE], false)
-	assert.Equal(t, logger.Enabled[levels.DEBUG], false)
-	assert.Equal(t, logger.Enabled[levels.WARN], false)
-	assert.Equal(t, logger.Enabled[levels.ERROR], true)
-	assert.Equal(t, logger.Enabled[levels.INFO], true)
-	assert.Equal(t, logger.Enabled[levels.FATAL], true)
+	logger.SetLevel(Level("INFO"))
+	assert.Equal(t, logger.Level(), Level("INFO"))
+	assert.Equal(t, logger.Enabled[Level("TRACE")], false)
+	assert.Equal(t, logger.Enabled[Level("DEBUG")], false)
+	assert.Equal(t, logger.Enabled[Level("WARN")], false)
+	assert.Equal(t, logger.Enabled[Level("ERROR")], true)
+	assert.Equal(t, logger.Enabled[Level("INFO")], true)
+	assert.Equal(t, logger.Enabled[Level("FATAL")], true)
 }
 
 func TestUnwrap(t *testing.T) {
@@ -123,7 +122,7 @@ func TestUnwrap(t *testing.T) {
 }
 
 func TestCompose(t *testing.T) {
-	msg, args := compose(levels.DEBUG, "test message", "example arg")
+	msg, args := compose(Level("DEBUG"), "test message", "example arg")
 	assert.NotNil(t, msg)
 	assert.Equal(t, msg, "[%s] [%s] test message\n")
 	assert.NotNil(t, args)
