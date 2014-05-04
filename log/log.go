@@ -2,59 +2,42 @@ package log
 
 import (
 	"fmt"
+	"github.com/ian-kent/go-log/levels"
 	"time"
 )
 
 type Logger struct {
-	level   LogLevel
-	Enabled map[LogLevel]bool
-}
-
-type LogLevel int
-
-const (
-	FATAL = iota
-	ERROR
-	INFO
-	WARN
-	DEBUG
-	TRACE
-)
-
-var levels = map[LogLevel]string{
-	TRACE: "TRACE",
-	DEBUG: "DEBUG",
-	WARN:  "WARN",
-	INFO:  "INFO",
-	ERROR: "ERROR",
-	FATAL: "FATAL",
+	level   levels.LogLevel
+	name    string
+	Enabled map[levels.LogLevel]bool
 }
 
 var logger *Logger
 
 func Global() *Logger {
 	if logger == nil {
-		logger = New(DEBUG)
+		logger = New(levels.DEBUG, ".")
 	}
 	return logger
 }
 
-func New(level LogLevel) *Logger {
+func New(level levels.LogLevel, name string) *Logger {
 	logger := &Logger{
 		level:   level,
-		Enabled: make(map[LogLevel]bool),
+		name:    name,
+		Enabled: make(map[levels.LogLevel]bool),
 	}
 	logger.SetLevel(level)
 	return logger
 }
 
-func compose(level LogLevel, args ...interface{}) (string, []interface{}) {
+func compose(level levels.LogLevel, args ...interface{}) (string, []interface{}) {
 	msg := "[%s] [%s] " + args[0].(string) + "\n"
 	args = args[1:]
-	return msg, append([]interface{}{time.Now(), levels[level]}, args...)
+	return msg, append([]interface{}{time.Now(), levels.LogLevels[level]}, args...)
 }
 
-func write(level LogLevel, params ...interface{}) {
+func write(level levels.LogLevel, params ...interface{}) {
 	msg, args := compose(level, params)
 	fmt.Printf(msg, args...)
 }
@@ -74,34 +57,37 @@ func unwrap(args ...interface{}) []interface{} {
 	return args
 }
 
-func Log(level LogLevel, params ...interface{}) {
+func Log(level levels.LogLevel, params ...interface{}) {
 	Global().Log(level, params...)
 }
 
-func Debug(params ...interface{})   { Log(DEBUG, params...) }
-func Info(params ...interface{})    { Log(INFO, params...) }
-func Warn(params ...interface{})    { Log(WARN, params...) }
-func Error(params ...interface{})   { Log(ERROR, params...) }
-func Trace(params ...interface{})   { Log(TRACE, params...) }
-func Printf(params ...interface{})  { Log(INFO, params...) }
-func Println(params ...interface{}) { Log(INFO, params...) }
-func Fatalf(params ...interface{})  { Log(FATAL, params...) }
+func Debug(params ...interface{})   { Log(levels.DEBUG, params...) }
+func Info(params ...interface{})    { Log(levels.INFO, params...) }
+func Warn(params ...interface{})    { Log(levels.WARN, params...) }
+func Error(params ...interface{})   { Log(levels.ERROR, params...) }
+func Trace(params ...interface{})   { Log(levels.TRACE, params...) }
+func Printf(params ...interface{})  { Log(levels.INFO, params...) }
+func Println(params ...interface{}) { Log(levels.INFO, params...) }
+func Fatalf(params ...interface{})  { Log(levels.FATAL, params...) }
 
-func (l *Logger) write(level LogLevel, params ...interface{}) {
+func (l *Logger) write(level levels.LogLevel, params ...interface{}) {
 	write(level, params...)
 }
-func (l *Logger) Log(level LogLevel, params ...interface{}) {
+func (l *Logger) Log(level levels.LogLevel, params ...interface{}) {
 	if !l.Enabled[level] {
 		return
 	}
 	l.write(level, unwrap(params...)...)
 }
-func (l *Logger) Level() LogLevel {
+func (l *Logger) Level() levels.LogLevel {
 	return l.level
 }
-func (l *Logger) SetLevel(level LogLevel) {
+func (l *Logger) Name() string {
+	return l.name
+}
+func (l *Logger) SetLevel(level levels.LogLevel) {
 	l.level = level
-	for k, _ := range levels {
+	for k, _ := range levels.LogLevels {
 		if k <= level {
 			l.Enabled[k] = true
 		} else {
@@ -110,11 +96,11 @@ func (l *Logger) SetLevel(level LogLevel) {
 	}
 }
 
-func (l *Logger) Debug(params ...interface{})   { l.Log(DEBUG, params...) }
-func (l *Logger) Info(params ...interface{})    { l.Log(INFO, params...) }
-func (l *Logger) Warn(params ...interface{})    { l.Log(WARN, params...) }
-func (l *Logger) Error(params ...interface{})   { l.Log(ERROR, params...) }
-func (l *Logger) Trace(params ...interface{})   { l.Log(TRACE, params...) }
-func (l *Logger) Printf(params ...interface{})  { l.Log(INFO, params...) }
-func (l *Logger) Println(params ...interface{}) { l.Log(INFO, params...) }
-func (l *Logger) Fatalf(params ...interface{})  { l.Log(FATAL, params...) }
+func (l *Logger) Debug(params ...interface{})   { l.Log(levels.DEBUG, params...) }
+func (l *Logger) Info(params ...interface{})    { l.Log(levels.INFO, params...) }
+func (l *Logger) Warn(params ...interface{})    { l.Log(levels.WARN, params...) }
+func (l *Logger) Error(params ...interface{})   { l.Log(levels.ERROR, params...) }
+func (l *Logger) Trace(params ...interface{})   { l.Log(levels.TRACE, params...) }
+func (l *Logger) Printf(params ...interface{})  { l.Log(levels.INFO, params...) }
+func (l *Logger) Println(params ...interface{}) { l.Log(levels.INFO, params...) }
+func (l *Logger) Fatalf(params ...interface{})  { l.Log(levels.FATAL, params...) }

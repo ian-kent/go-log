@@ -35,7 +35,10 @@ logger.Debug("Yey!")
 You can also create a local logger object:
 
 ```
-logger := log.New(log.DEBUG)
+import(
+	"github.com/ian-kent/go-log/levels"
+)
+logger := log.New(levels.DEBUG)
 ```
 
 ### Log levels
@@ -45,13 +48,16 @@ The default log level is DEBUG.
 To get the current log level:
 
 ```
-logger.Level()
+level := logger.Level()
 ```
 
 You can set the log level:
 
 ```
-logger.SetLevel(log.TRACE)
+import(
+	"github.com/ian-kent/go-log/levels"
+)
+logger.SetLevel(levels.TRACE)
 ```
 
 ### Contributing
