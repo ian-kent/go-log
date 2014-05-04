@@ -2,6 +2,7 @@ package log
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/ian-kent/go-log/levels"
 	"testing"
 )
 
@@ -17,6 +18,12 @@ func TestGlobal(t *testing.T) {
 	logger := Global()
 	assert.NotNil(t, logger)
 	assert.Equal(t, logger.Level(), Level("DEBUG"))
+}
+
+func TestLevel(t *testing.T) {
+	for k, s := range levels.LogLevelsToString {
+		assert.Equal(t, Level(s), k)
+	}
 }
 
 func TestLevels(t *testing.T) {
