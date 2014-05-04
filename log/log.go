@@ -87,7 +87,9 @@ func (l *Logger) write(level LogLevel, params ...interface{}) {
 	write(level, params...)
 }
 func (l *Logger) Log(level LogLevel, params ...interface{}) {
-	if !l.Enabled[level] { return }
+	if !l.Enabled[level] {
+		return
+	}
 	l.write(level, unwrap(params...)...)
 }
 func (l *Logger) Level() LogLevel {
