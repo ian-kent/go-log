@@ -56,6 +56,8 @@ func Write(level LogLevel, message string, params ...interface{}) {
 func Unwrap(args ...interface{}) []interface{} {
 	head := args[0]
 	switch head.(type) {
+	case func() []interface{}:
+		args = Unwrap(head.(func() []interface{})()...)
 	case func(...interface{}) []interface{}:
 		args = Unwrap(head.(func(...interface{}) []interface{})(args[1:]...)...)
 	}

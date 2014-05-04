@@ -22,6 +22,7 @@ import(
 log.Debug("Example log message: %s", "example arg")
 
 // Pass a function which returns a log message and arguments
+log.Debug(func(){[]interface{}{"Example log message: %s", "example arg"}})
 log.Debug(func(i ...interface{}){[]interface{}{"Example log message: %s", "example arg"}})
 ```
 

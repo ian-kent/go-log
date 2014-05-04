@@ -92,6 +92,19 @@ func TestUnwrap(t *testing.T) {
 	assert.Equal(t, args[0], "example log message")
 	assert.Equal(t, args[1], "example args")
 	assert.Equal(t, args[2], "more args")
+
+	args = Unwrap(func() []interface{} {
+		return []interface{}{
+			"example log message",
+			"example args",
+			"more example args",
+		}
+	})
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+	assert.Equal(t, args[2], "more example args")
 }
 
 func TestWrite(t *testing.T) {
