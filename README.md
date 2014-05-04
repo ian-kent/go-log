@@ -28,14 +28,14 @@ log.Debug(func(i ...interface{}){[]interface{}{"Example log message: %s", "examp
 
 You can also get the logger instance:
 ```
-logger := log.Global()
+logger := log.Logger()
 logger.Debug("Yey!")
 ```
 
-You can also create a local logger object:
+Or get a named logger instance:
 
 ```
-logger := log.New(log.Level("DEBUG"))
+logger := log.Logger("foo.bar")
 ```
 
 ### Log levels
@@ -51,7 +51,11 @@ level := logger.Level()
 You can set the log level:
 
 ```
-logger.SetLevel(log.Level("TRACE"))
+// From a LogLevel
+logger.SetLevel(levels.TRACE)
+
+// From a string
+logger.SetLevel(log.Stol("TRACE"))
 ```
 
 ### Contributing

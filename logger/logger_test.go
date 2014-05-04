@@ -1,0 +1,141 @@
+package logger
+
+import (
+	"github.com/stretchr/testify/assert"
+	"github.com/ian-kent/go-log/levels"
+	"testing"
+)
+
+func TestNew(t *testing.T) {
+	logger := New("")
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.NotNil(t, logger.Name())
+	assert.Equal(t, logger.Name(), "")
+
+	logger = New("foo")
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.NotNil(t, logger.Name())
+	assert.Equal(t, logger.Name(), "foo")
+
+	logger = New("foo.bar")
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.NotNil(t, logger.Name())
+	assert.Equal(t, logger.Name(), "foo.bar")
+}
+
+func TestLevels(t *testing.T) {
+	logger := New("")
+	assert.NotNil(t, logger)
+	assert.Equal(t, logger.Level(), levels.DEBUG)
+	assert.Equal(t, logger.Enabled()[levels.TRACE], false)
+	assert.Equal(t, logger.Enabled()[levels.DEBUG], true)
+	assert.Equal(t, logger.Enabled()[levels.WARN], true)
+	assert.Equal(t, logger.Enabled()[levels.ERROR], true)
+	assert.Equal(t, logger.Enabled()[levels.INFO], true)
+	assert.Equal(t, logger.Enabled()[levels.FATAL], true)
+
+	logger.SetLevel(levels.TRACE)
+	assert.Equal(t, logger.Level(), levels.TRACE)
+	assert.Equal(t, logger.Enabled()[levels.TRACE], true)
+	assert.Equal(t, logger.Enabled()[levels.DEBUG], true)
+	assert.Equal(t, logger.Enabled()[levels.WARN], true)
+	assert.Equal(t, logger.Enabled()[levels.ERROR], true)
+	assert.Equal(t, logger.Enabled()[levels.INFO], true)
+	assert.Equal(t, logger.Enabled()[levels.FATAL], true)
+
+	logger.SetLevel(levels.FATAL)
+	assert.Equal(t, logger.Level(), levels.FATAL)
+	assert.Equal(t, logger.Enabled()[levels.TRACE], false)
+	assert.Equal(t, logger.Enabled()[levels.DEBUG], false)
+	assert.Equal(t, logger.Enabled()[levels.WARN], false)
+	assert.Equal(t, logger.Enabled()[levels.ERROR], false)
+	assert.Equal(t, logger.Enabled()[levels.INFO], false)
+	assert.Equal(t, logger.Enabled()[levels.FATAL], true)
+
+	logger.SetLevel(levels.INFO)
+	assert.Equal(t, logger.Level(), levels.INFO)
+	assert.Equal(t, logger.Enabled()[levels.TRACE], false)
+	assert.Equal(t, logger.Enabled()[levels.DEBUG], false)
+	assert.Equal(t, logger.Enabled()[levels.WARN], false)
+	assert.Equal(t, logger.Enabled()[levels.ERROR], true)
+	assert.Equal(t, logger.Enabled()[levels.INFO], true)
+	assert.Equal(t, logger.Enabled()[levels.FATAL], true)
+}
+
+func TestUnwrap(t *testing.T) {
+	args := unwrap(func(args ...interface{}) []interface{} {
+		return []interface{}{
+			"example log message",
+			"example args",
+		}
+	})
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 2)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+
+	var passedArgs []interface{}
+	args = unwrap(func(args ...interface{}) []interface{} {
+		passedArgs = args
+		return []interface{}{
+			"example log message",
+			"example args",
+			"more example args",
+		}
+	}, "passed args", "more passed args")
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+	assert.Equal(t, args[2], "more example args")
+	assert.Equal(t, len(passedArgs), 2)
+	assert.Equal(t, passedArgs[0], "passed args")
+	assert.Equal(t, passedArgs[1], "more passed args")
+
+	args = unwrap("example log message", "example args", "more args")
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+	assert.Equal(t, args[2], "more args")
+
+	args = unwrap(func() []interface{} {
+		return []interface{}{
+			"example log message",
+			"example args",
+			"more example args",
+		}
+	})
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+	assert.Equal(t, args[2], "more example args")
+
+	args = unwrap(func() (string, []interface{}) {
+		return "example log message", []interface{}{
+			"example args",
+			"more example args",
+		}
+	})
+	assert.NotNil(t, args)
+	assert.Equal(t, len(args), 3)
+	assert.Equal(t, args[0], "example log message")
+	assert.Equal(t, args[1], "example args")
+	assert.Equal(t, args[2], "more example args")
+}
+
+func TestWrite(t *testing.T) {
+
+}
+
+func TestLog(t *testing.T) {
+
+}
+
+func TestGlobalFuncs(t *testing.T) {
+
+}

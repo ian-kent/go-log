@@ -1,70 +1,49 @@
 package log
 
 import (
-	"fmt"
+	"github.com/ian-kent/go-log/logger"
 	"github.com/ian-kent/go-log/levels"
-	"time"
+	"strings"
 )
 
-type Logger struct {
-	level   levels.LogLevel
-	name    string
-	Enabled map[levels.LogLevel]bool
+var global logger.Logger
+var cache map[string]logger.Logger = make(map[string]logger.Logger)
+
+// Converts a string level (e.g. DEBUG) to a LogLevel
+func Stol(level string) levels.LogLevel {
+	return levels.StringToLogLevels[strings.ToUpper(level)]
 }
 
-var logger *Logger
-
-func Level(level string) levels.LogLevel {
-	return levels.StringToLogLevels[level]
-}
-
-func Global() *Logger {
-	if logger == nil {
-		logger = New(levels.DEBUG, ".")
+// Returns a Logger instance
+//
+// If no arguments are given, the global/root logger
+// instance will be returned.
+//
+// If at least one argument is given, the logger instance
+// for that namespace will be returned.
+func Logger(args ...string) logger.Logger {
+	var name string
+	if len(args) > 0 {
+		name = args[0]
+	} else {
+		name = ""
 	}
-	return logger
-}
 
-func New(level levels.LogLevel, name string) *Logger {
-	logger := &Logger{
-		level:   level,
-		name:    name,
-		Enabled: make(map[levels.LogLevel]bool),
+	l, ok := cache[name]
+	if !ok {
+		l = logger.New(name)
+		l.SetLevel(levels.DEBUG)
+		cache[name] = l
 	}
-	logger.SetLevel(level)
-	return logger
-}
 
-func compose(level levels.LogLevel, args ...interface{}) (string, []interface{}) {
-	msg := "[%s] [%s] " + args[0].(string) + "\n"
-	args = args[1:]
-	return msg, append([]interface{}{time.Now(), levels.LogLevelsToString[level]}, args...)
-}
-
-func write(level levels.LogLevel, params ...interface{}) {
-	msg, args := compose(level, params)
-	fmt.Printf(msg, args...)
-}
-
-func unwrap(args ...interface{}) []interface{} {
-	head := args[0]
-	switch head.(type) {
-	case func() (string, []interface{}):
-		msg, args := head.(func() (string, []interface{}))()
-		args = unwrap(args...)
-		return append([]interface{}{msg}, args...)
-	case func() []interface{}:
-		args = unwrap(head.(func() []interface{})()...)
-	case func(...interface{}) []interface{}:
-		args = unwrap(head.(func(...interface{}) []interface{})(args[1:]...)...)
-	}
-	return args
+	return l
 }
 
 func Log(level levels.LogLevel, params ...interface{}) {
-	Global().Log(level, params...)
+	Logger().Log(level, params...)
 }
 
+func Level(level levels.LogLevel)   { Logger().Level() }
 func Debug(params ...interface{})   { Log(levels.DEBUG, params...) }
 func Info(params ...interface{})    { Log(levels.INFO, params...) }
 func Warn(params ...interface{})    { Log(levels.WARN, params...) }
@@ -73,38 +52,3 @@ func Trace(params ...interface{})   { Log(levels.TRACE, params...) }
 func Printf(params ...interface{})  { Log(levels.INFO, params...) }
 func Println(params ...interface{}) { Log(levels.INFO, params...) }
 func Fatalf(params ...interface{})  { Log(levels.FATAL, params...) }
-
-func (l *Logger) write(level levels.LogLevel, params ...interface{}) {
-	write(level, params...)
-}
-func (l *Logger) Log(level levels.LogLevel, params ...interface{}) {
-	if !l.Enabled[level] {
-		return
-	}
-	l.write(level, unwrap(params...)...)
-}
-func (l *Logger) Level() levels.LogLevel {
-	return l.level
-}
-func (l *Logger) Name() string {
-	return l.name
-}
-func (l *Logger) SetLevel(level levels.LogLevel) {
-	l.level = level
-	for k, _ := range levels.LogLevelsToString {
-		if k <= level {
-			l.Enabled[k] = true
-		} else {
-			l.Enabled[k] = false
-		}
-	}
-}
-
-func (l *Logger) Debug(params ...interface{})   { l.Log(levels.DEBUG, params...) }
-func (l *Logger) Info(params ...interface{})    { l.Log(levels.INFO, params...) }
-func (l *Logger) Warn(params ...interface{})    { l.Log(levels.WARN, params...) }
-func (l *Logger) Error(params ...interface{})   { l.Log(levels.ERROR, params...) }
-func (l *Logger) Trace(params ...interface{})   { l.Log(levels.TRACE, params...) }
-func (l *Logger) Printf(params ...interface{})  { l.Log(levels.INFO, params...) }
-func (l *Logger) Println(params ...interface{}) { l.Log(levels.INFO, params...) }
-func (l *Logger) Fatalf(params ...interface{})  { l.Log(levels.FATAL, params...) }
