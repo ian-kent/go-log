@@ -4,7 +4,7 @@ import (
 	"github.com/ian-kent/go-log/levels"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"os"
+	//"os"
 )
 
 func TestPattern(t *testing.T) {
