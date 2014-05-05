@@ -93,10 +93,9 @@ func (a *patternLayout) Format(level levels.LogLevel, message string, args ...in
 		case "X":
 			return "" // MDC (must specify key)
 		case "%":
-			return "%"
-		default:
-			return m
+			return "%"		
 		}
+		return m
 	})
 
 	return msg
