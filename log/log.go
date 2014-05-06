@@ -7,7 +7,6 @@ import (
 )
 
 var global logger.Logger
-var cache map[string]logger.Logger = make(map[string]logger.Logger)
 
 // Converts a string level (e.g. DEBUG) to a LogLevel
 func Stol(level string) levels.LogLevel {
@@ -29,12 +28,12 @@ func Logger(args ...string) logger.Logger {
 		name = ""
 	}
 
-	l, ok := cache[name]
-	if !ok {
-		l = logger.New(name)
-		l.SetLevel(levels.DEBUG)
-		cache[name] = l
+	if global == nil {
+		global = logger.New("")
+		global.SetLevel(levels.DEBUG)
 	}
+
+	l := global.GetLogger(name)
 
 	return l
 }
