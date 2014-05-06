@@ -105,11 +105,13 @@ func (l *logger) write(level levels.LogLevel, params ...interface{}) {
 }
 
 func (l *logger) Appender() Appender {
-	if a := l.Appender(); a != nil {
+	if a := l.appender; a != nil {
 		return a
 	}
-	if a := l.parent.Appender(); a != nil {
-		return a
+	if l.parent != nil {
+		if a := l.parent.Appender(); a != nil {
+			return a
+		}
 	}
 	return nil
 }
