@@ -58,6 +58,29 @@ logger.SetLevel(levels.TRACE)
 logger.SetLevel(log.Stol("TRACE"))
 ```
 
+### Logger inheritance
+
+Loggers are namespaced with a ```.```, following similar rules to Log4j.
+
+If you create a logger named ```foo```, it will automatically inherit the
+log settings (levels and appender) of the root logger.
+
+If you then create a logger named ```foo.bar```, it will inherit the log
+settings of ```foo```, which in turn inherits the log settings from the
+root logger.
+
+You can break this by setting the log level or setting an appender on
+a child logger, e.g.:
+
+```
+logger := log.Logger("foo.bar")
+logger.SetLevel(levels.TRACE)
+logger.SetAppender(appenders.Console())
+```
+
+If you then created a logger named ```foo.bar.qux```, it would inherit
+the trace level and console appender of the ```foo.bar``` logger.
+
 ### Contributing
 
 Before submitting a pull request:

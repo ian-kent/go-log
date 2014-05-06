@@ -65,7 +65,7 @@ func (l *logger) New(name string) Logger {
 	lg := Logger(&logger{
 		level: levels.INHERIT,
 		name: name,
-		enabled: nil,
+		enabled: make(map[levels.LogLevel]bool),
 		appender: nil,
 		children: make([]Logger, 0),
 		parent: l,
@@ -159,6 +159,10 @@ func (l *logger) SetLevel(level levels.LogLevel) {
 			l.enabled[k] = false
 		}
 	}
+}
+
+func (l *logger) SetAppender(appender Appender) {
+	l.appender = appender
 }
 
 func (l *logger) Debug(params ...interface{})   { l.Log(levels.DEBUG, params...) }
