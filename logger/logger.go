@@ -3,6 +3,7 @@ package logger
 import (
 	"github.com/ian-kent/go-log/appenders"
 	"github.com/ian-kent/go-log/levels"
+	"github.com/ian-kent/go-log/layout"
 	"strings"
 )
 
@@ -31,6 +32,8 @@ type logger struct {
 
 type Appender interface {
 	Write(level levels.LogLevel, message string, args ...interface{})
+	SetLayout(layout layout.Layout)
+	Layout() layout.Layout
 }
 
 func New(name string) Logger {
