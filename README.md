@@ -48,7 +48,7 @@ To get the current log level:
 level := logger.Level()
 ```
 
-You can set the log level:
+Or to set the log level:
 
 ```
 // From a LogLevel
@@ -56,6 +56,29 @@ logger.SetLevel(levels.TRACE)
 
 // From a string
 logger.SetLevel(log.Stol("TRACE"))
+```
+
+### Log appenders
+
+The default log appender is ```appenders.Console()```, which logs
+the raw message to STDOUT.
+
+To get the current log appender:
+
+```
+appender := logger.Appender()
+```
+
+If the appender is ```nil```, the parent loggers appender will be used
+instead.
+
+If the appender eventually resolves to ```nil```, log data will be
+silently dropped.
+
+You can set the log appender:
+
+```
+logger.SetAppender(appenders.Console())
 ```
 
 ### Logger inheritance
