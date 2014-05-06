@@ -2,8 +2,8 @@ package logger
 
 import (
 	"github.com/ian-kent/go-log/appenders"
-	"github.com/ian-kent/go-log/levels"
 	"github.com/ian-kent/go-log/layout"
+	"github.com/ian-kent/go-log/levels"
 	"strings"
 )
 
