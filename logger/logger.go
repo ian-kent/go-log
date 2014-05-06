@@ -61,6 +61,19 @@ func unwrap(args ...interface{}) []interface{} {
 	return args
 }
 
+func (l *logger) New(name string) Logger {
+	lg := Logger(&logger{
+		level: levels.INHERIT,
+		name: name,
+		enabled: nil,
+		appender: nil,
+		children: make([]Logger, 0),
+		parent: l,
+	})
+	l.children = append(l.children, lg)
+	return lg
+}
+
 func (l *logger) GetLogger(name string) Logger {
 	bits := strings.Split(name, ".")
 
@@ -70,38 +83,55 @@ func (l *logger) GetLogger(name string) Logger {
 		}
 		
 		child := bits[1]
+		n := strings.Join(bits[1:], ".")
 		for _, c := range l.children {
 			if c.Name() == child {
-				return c.GetLogger(strings.Join(bits[1:], "."))
+				return c.GetLogger(n)
 			}
 		}
 
-		lg := New(child)
-		lg.(*logger).parent = l
-		l.children = append(l.children, lg)
-		return lg.GetLogger(strings.Join(bits[1:], "."))
+		lg := l.New(child)
+		return lg.GetLogger(n)
 	}
-	lg := New(bits[0])
-	lg.(*logger).parent = l
+	lg := l.New(bits[0])
 	return lg.GetLogger(name)
 }
 
 func (l *logger) write(level levels.LogLevel, params ...interface{}) {
-	l.Appender().Write(level, params[0].(string), params[1:]...)
+	a := l.Appender()
+	if a != nil {
+		a.Write(level, params[0].(string), params[1:]...)
+	}
+}
+
+func (l *logger) Appender() Appender {
+	if a := l.Appender(); a != nil {
+		return a
+	}
+	if a := l.parent.Appender(); a != nil {
+		return a
+	}
+	return nil
 }
 
 func (l *logger) Log(level levels.LogLevel, params ...interface{}) {
-	if !l.enabled[level] {
+	if !l.Enabled()[level] {
 		return
 	}
 	l.write(level, unwrap(params...)...)
 }
 
 func (l *logger) Level() levels.LogLevel {
+	if l.level == levels.INHERIT {
+		return l.parent.Level()
+	}
 	return l.level
 }
 
 func (l *logger) Enabled() map[levels.LogLevel]bool {
+	if l.level == levels.INHERIT {
+		return l.parent.Enabled()
+	}
 	return l.enabled
 }
 

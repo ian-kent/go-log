@@ -9,6 +9,7 @@ const (
 	WARN
 	DEBUG
 	TRACE
+	INHERIT
 )
 
 var StringToLogLevels = map[string]LogLevel{
@@ -18,6 +19,7 @@ var StringToLogLevels = map[string]LogLevel{
 	"INFO": INFO,
 	"ERROR": ERROR,
 	"FATAL": FATAL,
+	"INHERIT": INHERIT,
 }
 
 var LogLevelsToString = map[LogLevel]string{
@@ -27,4 +29,5 @@ var LogLevelsToString = map[LogLevel]string{
 	INFO:  "INFO",
 	ERROR: "ERROR",
 	FATAL: "FATAL",
+	INHERIT: "INHERIT",
 }
