@@ -81,6 +81,41 @@ You can set the log appender:
 logger.SetAppender(appenders.Console())
 ```
 
+### Layouts
+
+Each appender has its own layout. This allows the log data to be transformed
+as it is written to the appender.
+
+The default layout is ```layout.Basic()```, which passes the log message
+and its arguments through ```fmt.Sprintf```.
+
+To get the current log appender layout:
+```
+appender := logger.Appender()
+layout := appender.Layout()
+```
+
+To set the log appender layout:
+```
+appender.SetLayout(layout.Basic())
+```
+
+You can also use ```layout.Pattern(pattern string)```, which accepts a
+pattern format similar to log4j:
+
+| Code | Description
+| ---- | -----------
+| %c   | The package the log statement is in
+| %C   | Currently also the package the log statement is in
+| %d   | The current date/time, using ```time.Now().String()```
+| %F   | The filename the log statement is in
+| %l   | The location of the log statement, e.g. ```package/somefile.go:12```
+| %L   | The line number the log statement is on
+| %m   | The log message and its arguments formatted with ```fmt.Sprintf```
+| %n   | A new-line character
+| %p   | Priority - the log level
+| %r   | ms since logger was created
+
 ### Logger inheritance
 
 Loggers are namespaced with a ```.```, following similar rules to Log4j.

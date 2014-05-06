@@ -8,15 +8,24 @@ import (
 
 type consoleAppender struct {
 	Appender
-	Layout layout.Layout
+	layout layout.Layout
 }
 
 func Console() *consoleAppender {
-	return &consoleAppender{
-		Layout: layout.Default(),
+	a := &consoleAppender{
+		layout: layout.Default(),
 	}
+	return a
 }
 
 func (a *consoleAppender) Write(level levels.LogLevel, message string, args ...interface{}) {
-	fmt.Println(a.Layout.Format(level, message, args...))
+	fmt.Println(a.Layout().Format(level, message, args...))
+}
+
+func (a *consoleAppender) Layout() layout.Layout {
+	return a.layout
+}
+
+func (a *consoleAppender) SetLayout(layout layout.Layout) {
+	a.layout = layout
 }

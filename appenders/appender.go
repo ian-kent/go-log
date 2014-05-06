@@ -12,10 +12,11 @@ Satisfy the Appender interface to implement your own log appender.
 
 import (
 	"github.com/ian-kent/go-log/levels"
+	"github.com/ian-kent/go-log/layout"
 )
 
 type Appender interface {
-	Level() levels.LogLevel
-	Name() string
 	Write(level levels.LogLevel, message string, args ...interface{})
+	Layout() layout.Layout
+	SetLayout(layout.Layout)
 }
