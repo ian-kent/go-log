@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/ian-kent/go-log/logger"
 	"github.com/ian-kent/go-log/levels"
+	"github.com/ian-kent/go-log/logger"
 	"strings"
 )
 

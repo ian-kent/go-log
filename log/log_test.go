@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/stretchr/testify/assert"
 	"github.com/ian-kent/go-log/levels"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 

@@ -1,9 +1,9 @@
 package appenders
 
 import (
-	"github.com/ian-kent/go-log/levels"
-	"github.com/ian-kent/go-log/layout"
 	"fmt"
+	"github.com/ian-kent/go-log/layout"
+	"github.com/ian-kent/go-log/levels"
 )
 
 type consoleAppender struct {

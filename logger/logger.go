@@ -1,20 +1,20 @@
 package logger
 
-import(
-	"github.com/ian-kent/go-log/levels"
+import (
 	"github.com/ian-kent/go-log/appenders"
+	"github.com/ian-kent/go-log/levels"
 	"strings"
 )
 
 type Logger interface {
-	Level()            levels.LogLevel
-	Name()             string
-	FullName()         string
-	Enabled()          map[levels.LogLevel]bool
-	Appender()         Appender
-	Children()         []Logger
-	Parent()           Logger
-	GetLogger(string)  Logger
+	Level() levels.LogLevel
+	Name() string
+	FullName() string
+	Enabled() map[levels.LogLevel]bool
+	Appender() Appender
+	Children() []Logger
+	Parent() Logger
+	GetLogger(string) Logger
 	SetLevel(levels.LogLevel)
 	Log(levels.LogLevel, ...interface{})
 }
@@ -35,12 +35,12 @@ type Appender interface {
 
 func New(name string) Logger {
 	l := Logger(&logger{
-		level: levels.DEBUG,
-		name: name,
-		enabled: make(map[levels.LogLevel]bool),
+		level:    levels.DEBUG,
+		name:     name,
+		enabled:  make(map[levels.LogLevel]bool),
 		appender: appenders.Console(),
 		children: make([]Logger, 0),
-		parent: nil,
+		parent:   nil,
 	})
 	l.SetLevel(levels.DEBUG)
 	return l
@@ -63,12 +63,12 @@ func unwrap(args ...interface{}) []interface{} {
 
 func (l *logger) New(name string) Logger {
 	lg := Logger(&logger{
-		level: levels.INHERIT,
-		name: name,
-		enabled: make(map[levels.LogLevel]bool),
+		level:    levels.INHERIT,
+		name:     name,
+		enabled:  make(map[levels.LogLevel]bool),
 		appender: nil,
 		children: make([]Logger, 0),
-		parent: l,
+		parent:   l,
 	})
 	l.children = append(l.children, lg)
 	return lg
@@ -81,7 +81,7 @@ func (l *logger) GetLogger(name string) Logger {
 		if len(bits) == 1 {
 			return l
 		}
-		
+
 		child := bits[1]
 		n := strings.Join(bits[1:], ".")
 		for _, c := range l.children {

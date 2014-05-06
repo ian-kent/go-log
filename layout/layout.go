@@ -11,7 +11,7 @@ Satisfy the Layout interface to implement your own log layout.
 
 */
 
-import(
+import (
 	"github.com/ian-kent/go-log/levels"
 )
 

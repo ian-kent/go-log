@@ -13,21 +13,21 @@ const (
 )
 
 var StringToLogLevels = map[string]LogLevel{
-	"TRACE": TRACE,
-	"DEBUG": DEBUG,
-	"WARN": WARN,
-	"INFO": INFO,
-	"ERROR": ERROR,
-	"FATAL": FATAL,
+	"TRACE":   TRACE,
+	"DEBUG":   DEBUG,
+	"WARN":    WARN,
+	"INFO":    INFO,
+	"ERROR":   ERROR,
+	"FATAL":   FATAL,
 	"INHERIT": INHERIT,
 }
 
 var LogLevelsToString = map[LogLevel]string{
-	TRACE: "TRACE",
-	DEBUG: "DEBUG",
-	WARN:  "WARN",
-	INFO:  "INFO",
-	ERROR: "ERROR",
-	FATAL: "FATAL",
+	TRACE:   "TRACE",
+	DEBUG:   "DEBUG",
+	WARN:    "WARN",
+	INFO:    "INFO",
+	ERROR:   "ERROR",
+	FATAL:   "FATAL",
 	INHERIT: "INHERIT",
 }

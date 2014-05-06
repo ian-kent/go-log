@@ -1,12 +1,12 @@
 package appenders
 
 import (
+	"bytes"
 	"github.com/ian-kent/go-log/levels"
 	"github.com/stretchr/testify/assert"
-	"testing"
-	"os"
-	"bytes"
 	"io"
+	"os"
+	"testing"
 )
 
 func TestConsole(t *testing.T) {

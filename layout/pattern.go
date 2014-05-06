@@ -1,14 +1,14 @@
 package layout
 
 import (
-	"regexp"
-	"github.com/ian-kent/go-log/levels"
 	"fmt"
-	"time"
+	"github.com/ian-kent/go-log/levels"
+	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
-	"path/filepath"
+	"time"
 )
 
 // http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
@@ -17,23 +17,23 @@ type patternLayout struct {
 	Layout
 	Pattern string
 	created int64
-	re *regexp.Regexp
+	re      *regexp.Regexp
 }
 
 type caller struct {
-	pc uintptr
-	file string
-	line int
-	ok bool
-	pkg string
-	fullpkg string
+	pc       uintptr
+	file     string
+	line     int
+	ok       bool
+	pkg      string
+	fullpkg  string
 	filename string
 }
 
 func Pattern(pattern string) *patternLayout {
 	return &patternLayout{
 		Pattern: pattern,
-		re: regexp.MustCompile("%(\\w|%)(?:{([^}]+)})?"),
+		re:      regexp.MustCompile("%(\\w|%)(?:{([^}]+)})?"),
 		created: time.Now().UnixNano(),
 	}
 }
@@ -87,13 +87,13 @@ func (a *patternLayout) Format(level levels.LogLevel, message string, args ...in
 		case "p":
 			return levels.LogLevelsToString[level]
 		case "r":
-			return strconv.FormatInt((r - a.created) / 100000, 10)
+			return strconv.FormatInt((r-a.created)/100000, 10)
 		case "x":
 			return "" // NDC
 		case "X":
 			return "" // MDC (must specify key)
 		case "%":
-			return "%"		
+			return "%"
 		}
 		return m
 	})
