@@ -139,6 +139,17 @@ logger.SetAppender(appenders.Console())
 If you then created a logger named ```foo.bar.qux```, it would inherit
 the trace level and console appender of the ```foo.bar``` logger.
 
+### Roadmap
+
+* log4j configuration support
+  * .properties
+  * .xml
+  * .json
+* add appenders
+  * rolling file
+  * socket
+  * fluentd
+
 ### Contributing
 
 Before submitting a pull request:
