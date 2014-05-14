@@ -110,6 +110,26 @@ r := appenders.RollingFile("filename.log", true)
 r.MaxFileSize = 1024 // 1KB, defaults to 100MB
 ```
 
+#### Fluentd appender
+
+The fluentd appender lets you write log data directly to fluentd:
+
+```
+logger.SetAppender(appenders.Fluentd(fluent.Config{}))
+```
+
+It uses ```github.com/t-k/fluent-logger-golang```.
+
+The tag is currently fixed to 'go-log', and the data structure sent
+to fluentd is simple:
+
+```
+{
+  message: "<output from layout>"
+}
+
+```
+
 ### Layouts
 
 Each appender has its own layout. This allows the log data to be transformed
@@ -176,7 +196,6 @@ the trace level and console appender of the ```foo.bar``` logger.
   * .json
 * add appenders
   * socket
-  * fluentd
 * optimise logger creation
   * collapse loggers when parent namespace is unused
   * reorganise loggers when new child tree is created
