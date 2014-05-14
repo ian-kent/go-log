@@ -194,8 +194,11 @@ the trace level and console appender of the ```foo.bar``` logger.
   * .properties
   * .xml
   * .json
-* add appenders
-  * socket
+* layouts
+  * fixmes/todos in pattern layout
+* appenders
+  * add socket appender
+  * fixmes/todos and tests for fluentd appender
 * optimise logger creation
   * collapse loggers when parent namespace is unused
   * reorganise loggers when new child tree is created
