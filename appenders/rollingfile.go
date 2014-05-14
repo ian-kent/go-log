@@ -7,6 +7,7 @@ import (
 	"github.com/ian-kent/go-log/levels"
 	"strings"
 	"strconv"
+	"sync"
 )
 
 type rollingFileAppender struct {
@@ -18,6 +19,7 @@ type rollingFileAppender struct {
 	filename string
 	file *os.File
 	append bool
+	writeMutex sync.Mutex
 
 	bytesWritten int64
 }
@@ -48,6 +50,8 @@ func (a *rollingFileAppender) Close() {
 func (a *rollingFileAppender) Write(level levels.LogLevel, message string, args ...interface{}) {
 	m := a.Layout().Format(level, message, args...)
 	if !strings.HasSuffix(m, "\n") { m += "\n"}
+
+	a.writeMutex.Lock()
 	a.file.Write([]byte(m))
 
 	a.bytesWritten += int64(len(m))
@@ -55,6 +59,8 @@ func (a *rollingFileAppender) Write(level levels.LogLevel, message string, args 
 		a.bytesWritten = 0
 		a.rotateFile()
 	}
+
+	a.writeMutex.Unlock()
 }
 
 func (a *rollingFileAppender) Layout() layout.Layout {
