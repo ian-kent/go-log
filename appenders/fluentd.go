@@ -10,14 +10,14 @@ import (
 
 type fluentdAppender struct {
 	Appender
-	layout layout.Layout
-	fluent *fluent.Fluent
+	layout       layout.Layout
+	fluent       *fluent.Fluent
 	fluentConfig fluent.Config
 }
 
 func Fluentd(config fluent.Config) *fluentdAppender {
 	a := &fluentdAppender{
-		layout: layout.Default(),
+		layout:       layout.Default(),
 		fluentConfig: config,
 	}
 	a.Open()

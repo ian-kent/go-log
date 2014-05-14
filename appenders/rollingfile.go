@@ -1,24 +1,24 @@
 package appenders
 
 import (
-	"os"
 	"fmt"
 	"github.com/ian-kent/go-log/layout"
 	"github.com/ian-kent/go-log/levels"
-	"strings"
+	"os"
 	"strconv"
+	"strings"
 	"sync"
 )
 
 type rollingFileAppender struct {
 	Appender
-	layout layout.Layout
-	MaxFileSize int64
+	layout         layout.Layout
+	MaxFileSize    int64
 	MaxBackupIndex int
 
-	filename string
-	file *os.File
-	append bool
+	filename   string
+	file       *os.File
+	append     bool
 	writeMutex sync.Mutex
 
 	bytesWritten int64
@@ -26,11 +26,11 @@ type rollingFileAppender struct {
 
 func RollingFile(filename string, append bool) *rollingFileAppender {
 	a := &rollingFileAppender{
-		layout: layout.Default(),
-		MaxFileSize: 104857600,
+		layout:         layout.Default(),
+		MaxFileSize:    104857600,
 		MaxBackupIndex: 1,
-		append: append,
-		bytesWritten: 0,
+		append:         append,
+		bytesWritten:   0,
 	}
 	err := a.SetFilename(filename)
 	if err != nil {
@@ -49,7 +49,9 @@ func (a *rollingFileAppender) Close() {
 
 func (a *rollingFileAppender) Write(level levels.LogLevel, message string, args ...interface{}) {
 	m := a.Layout().Format(level, message, args...)
-	if !strings.HasSuffix(m, "\n") { m += "\n"}
+	if !strings.HasSuffix(m, "\n") {
+		m += "\n"
+	}
 
 	a.writeMutex.Lock()
 	a.file.Write([]byte(m))
@@ -95,11 +97,11 @@ func (a *rollingFileAppender) rotateFile() {
 
 	for n := a.MaxBackupIndex; n > 0; n-- {
 		f1 := a.filename + "." + strconv.Itoa(n)
-		f2 := a.filename + "." + strconv.Itoa(n + 1)
+		f2 := a.filename + "." + strconv.Itoa(n+1)
 		os.Rename(f1, f2)
 	}
 
-	os.Rename(a.filename, a.filename + ".1")
+	os.Rename(a.filename, a.filename+".1")
 
 	a.openFile()
 }
@@ -110,9 +112,9 @@ func (a *rollingFileAppender) closeFile() {
 	}
 }
 func (a *rollingFileAppender) openFile() error {
-	mode := os.O_WRONLY|os.O_APPEND|os.O_CREATE
+	mode := os.O_WRONLY | os.O_APPEND | os.O_CREATE
 	if !a.append {
-		mode = os.O_WRONLY|os.O_CREATE
+		mode = os.O_WRONLY | os.O_CREATE
 	}
 	f, err := os.OpenFile(a.filename, mode, 0666)
 	a.file = f

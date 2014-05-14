@@ -125,4 +125,3 @@ func TestRollingFileRotate(t *testing.T) {
 	f.Close()
 	a.Close()
 }
-
