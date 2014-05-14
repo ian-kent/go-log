@@ -5,11 +5,16 @@ Go-Log
 
 A logger, for Go!
 
+It's sort of ```log``` and ```code.google.com/p/log4go``` compatible, so in most cases
+can be used without any code changes.
+
 ### Getting started
 
 Install go-log:
 
-```go get github.com/ian-kent/go-log/log```
+```
+go get github.com/ian-kent/go-log/log
+```
 
 Use the logger in your application:
 
