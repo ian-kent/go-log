@@ -202,6 +202,7 @@ the trace level and console appender of the ```foo.bar``` logger.
 * optimise logger creation
   * collapse loggers when parent namespace is unused
   * reorganise loggers when new child tree is created
+* add godoc documentation
 
 ### Contributing
 
