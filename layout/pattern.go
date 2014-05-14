@@ -65,10 +65,12 @@ func (a *patternLayout) Format(level levels.LogLevel, message string, args ...in
 	msg := a.re.ReplaceAllStringFunc(a.Pattern, func(m string) string {
 		parts := a.re.FindStringSubmatch(m)
 		switch parts[1] {
+		// FIXME
+		// %c and %C should probably return the logger name, not the package
+		// name, since that's how the logger is created in the first place!
 		case "c":
 			return caller.pkg
 		case "C":
-			// FIXME no runtime way to find package name?
 			return caller.pkg
 		case "d":
 			// FIXME specifier, e.g. %d{HH:mm:ss,SSS}
