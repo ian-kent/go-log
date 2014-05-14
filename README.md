@@ -81,6 +81,30 @@ You can set the log appender:
 logger.SetAppender(appenders.Console())
 ```
 
+#### Rolling file appender
+
+Similar to log4j's rolling file appender, you can use
+
+```
+// Append to (or create) file
+logger.SetAppender(appenders.RollingFile("filename.log", true))
+
+// Truncate (or create) file
+logger.SetAppender(appenders.RollingFile("filename.log", false))
+```
+
+You can also control the number of log files which are kept:
+```
+r := appenders.RollingFile("filename.log", true)
+r.MaxBackupIndex = 2 // filename.log, filename.log.1, filename.log.2
+```
+
+And the maximum log file size (in bytes):
+```
+r := appenders.RollingFile("filename.log", true)
+r.MaxFileSize = 1024 // 1KB, defaults to 100MB
+```
+
 ### Layouts
 
 Each appender has its own layout. This allows the log data to be transformed
@@ -146,9 +170,11 @@ the trace level and console appender of the ```foo.bar``` logger.
   * .xml
   * .json
 * add appenders
-  * rolling file
   * socket
   * fluentd
+* optimise logger creation
+  * collapse loggers when parent namespace is unused
+  * reorganise loggers when new child tree is created
 
 ### Contributing
 
