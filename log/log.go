@@ -48,6 +48,7 @@ func Info(params ...interface{})    { Log(levels.INFO, params...) }
 func Warn(params ...interface{})    { Log(levels.WARN, params...) }
 func Error(params ...interface{})   { Log(levels.ERROR, params...) }
 func Trace(params ...interface{})   { Log(levels.TRACE, params...) }
+func Fatal(params ...interface{})   { Log(levels.FATAL, params...) }
 func Printf(params ...interface{})  { Log(levels.INFO, params...) }
 func Println(params ...interface{}) { Log(levels.INFO, params...) }
 func Fatalf(params ...interface{})  { Log(levels.FATAL, params...) }
