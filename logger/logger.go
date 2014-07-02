@@ -18,6 +18,7 @@ type Logger interface {
 	GetLogger(string) Logger
 	SetLevel(levels.LogLevel)
 	Log(levels.LogLevel, ...interface{})
+        SetAppender(appender Appender)
 }
 
 type logger struct {
