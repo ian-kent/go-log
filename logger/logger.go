@@ -28,6 +28,7 @@ type Logger interface {
 	Trace(params ...interface{})
 	Printf(params ...interface{})
 	Println(params ...interface{})
+	Fatal(params ...interface{})
 	Fatalf(params ...interface{})
 }
 
@@ -188,4 +189,5 @@ func (l *logger) Error(params ...interface{})   { l.Log(levels.ERROR, params...)
 func (l *logger) Trace(params ...interface{})   { l.Log(levels.TRACE, params...) }
 func (l *logger) Printf(params ...interface{})  { l.Log(levels.INFO, params...) }
 func (l *logger) Println(params ...interface{}) { l.Log(levels.INFO, params...) }
+func (l *logger) Fatal(params ...interface{})   { l.Log(levels.FATAL, params...) }
 func (l *logger) Fatalf(params ...interface{})  { l.Log(levels.FATAL, params...) }
