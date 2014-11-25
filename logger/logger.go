@@ -1,10 +1,11 @@
 package logger
 
 import (
+	"strings"
+
 	"github.com/ian-kent/go-log/appenders"
 	"github.com/ian-kent/go-log/layout"
 	"github.com/ian-kent/go-log/levels"
-	"strings"
 )
 
 type Logger interface {
@@ -18,7 +19,16 @@ type Logger interface {
 	GetLogger(string) Logger
 	SetLevel(levels.LogLevel)
 	Log(levels.LogLevel, ...interface{})
-        SetAppender(appender Appender)
+	SetAppender(appender Appender)
+
+	Debug(params ...interface{})
+	Info(params ...interface{})
+	Warn(params ...interface{})
+	Error(params ...interface{})
+	Trace(params ...interface{})
+	Printf(params ...interface{})
+	Println(params ...interface{})
+	Fatalf(params ...interface{})
 }
 
 type logger struct {
