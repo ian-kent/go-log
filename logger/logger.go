@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"os"
 	"strings"
 
 	"github.com/ian-kent/go-log/appenders"
@@ -136,6 +137,10 @@ func (l *logger) Log(level levels.LogLevel, params ...interface{}) {
 		return
 	}
 	l.write(level, unwrap(params...)...)
+
+	if level == levels.FATAL {
+		os.Exit(1)
+	}
 }
 
 func (l *logger) Level() levels.LogLevel {
