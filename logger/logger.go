@@ -35,12 +35,13 @@ type Logger interface {
 
 type logger struct {
 	Logger
-	level    levels.LogLevel
-	name     string
-	enabled  map[levels.LogLevel]bool
-	appender Appender
-	children []Logger
-	parent   Logger
+	level      levels.LogLevel
+	name       string
+	enabled    map[levels.LogLevel]bool
+	appender   Appender
+	children   []Logger
+	parent     Logger
+	ExitOnFatal bool
 }
 
 type Appender interface {
@@ -138,7 +139,7 @@ func (l *logger) Log(level levels.LogLevel, params ...interface{}) {
 	}
 	l.write(level, unwrap(params...)...)
 
-	if level == levels.FATAL {
+	if l.ExitOnFatal && level == levels.FATAL {
 		os.Exit(1)
 	}
 }

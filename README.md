@@ -8,6 +8,16 @@ A logger, for Go!
 It's sort of ```log``` and ```code.google.com/p/log4go``` compatible, so in most cases
 can be used without any code changes.
 
+#### Breaking change
+
+go-log was inconsistent with the default Go 'log' package, and log.Fatal calls didn't trigger an os.Exit(1).
+
+This has been fixed in the current release of go-log, which might break backwards compatibility.
+
+You can disable the fix by setting ExitOnFatal to false, e.g.
+
+    log.GetLogger().ExitOnFatal = false
+
 ### Getting started
 
 Install go-log:
