@@ -16,7 +16,7 @@ This has been fixed in the current release of go-log, which might break backward
 
 You can disable the fix by setting ExitOnFatal to false, e.g.
 
-    log.GetLogger().ExitOnFatal = false
+    log.Logger().ExitOnFatal = false
 
 ### Getting started
 
