@@ -43,7 +43,7 @@ func getCaller() *caller {
 
 	// TODO feels nasty?
 	dir, fn := filepath.Split(file)
-	bits := strings.Split(dir, string(filepath.Separator))
+	bits := strings.Split(dir, "/")
 	pkg := bits[len(bits)-2]
 
 	if ok {
