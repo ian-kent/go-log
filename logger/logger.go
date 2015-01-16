@@ -35,12 +35,12 @@ type Logger interface {
 
 type logger struct {
 	Logger
-	level      levels.LogLevel
-	name       string
-	enabled    map[levels.LogLevel]bool
-	appender   Appender
-	children   []Logger
-	parent     Logger
+	level       levels.LogLevel
+	name        string
+	enabled     map[levels.LogLevel]bool
+	appender    Appender
+	children    []Logger
+	parent      Logger
 	ExitOnFatal bool
 }
 
@@ -52,12 +52,13 @@ type Appender interface {
 
 func New(name string) Logger {
 	l := Logger(&logger{
-		level:    levels.DEBUG,
-		name:     name,
-		enabled:  make(map[levels.LogLevel]bool),
-		appender: appenders.Console(),
-		children: make([]Logger, 0),
-		parent:   nil,
+		level:       levels.DEBUG,
+		name:        name,
+		enabled:     make(map[levels.LogLevel]bool),
+		appender:    appenders.Console(),
+		children:    make([]Logger, 0),
+		parent:      nil,
+		ExitOnFatal: true,
 	})
 	l.SetLevel(levels.DEBUG)
 	return l
