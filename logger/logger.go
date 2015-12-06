@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -115,10 +116,20 @@ func (l *logger) GetLogger(name string) Logger {
 	return lg.GetLogger(name)
 }
 
+type stringer interface {
+	String() string
+}
+
 func (l *logger) write(level levels.LogLevel, params ...interface{}) {
 	a := l.Appender()
 	if a != nil {
-		a.Write(level, params[0].(string), params[1:]...)
+		if s, ok := params[0].(string); ok {
+			a.Write(level, s, params[1:]...)
+		} else if s, ok := params[0].(stringer); ok {
+			a.Write(level, s.String(), params[1:]...)
+		} else {
+			a.Write(level, fmt.Sprintf("%s", params[0]), params[1:]...)
+		}
 	}
 }
 
