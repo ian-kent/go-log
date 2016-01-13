@@ -15,12 +15,19 @@ type fluentdAppender struct {
 	fluentConfig fluent.Config
 }
 
-func Fluentd(config fluent.Config) *fluentdAppender {
+func SafeFluentd(config fluent.Config) (*fluentdAppender, error) {
 	a := &fluentdAppender{
 		layout:       layout.Default(),
 		fluentConfig: config,
 	}
-	a.Open()
+	if err := a.Open(); err != nil {
+		return nil, err
+	}
+	return a, nil
+}
+
+func Fluentd(config fluent.Config) *fluentdAppender {
+	a, _ := SafeFluentd(config)
 	return a
 }
 
