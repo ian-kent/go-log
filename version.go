@@ -22,6 +22,6 @@ func Version() string {
 		AppVersionRev = "0"
 	}
 
-	return fmt.Sprintf("%s %d.%d.%s (Go runtime %s).\nCopyright (c) 2014, Ian Kent.",
+	return fmt.Sprintf("%s %d.%d.%s (Go runtime %s).\nCopyright (c) 2014 - 2016, Ian Kent.",
 		AppName, AppVersionMajor, AppVersionMinor, AppVersionRev, runtime.Version())
 }

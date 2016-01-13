@@ -10,6 +10,7 @@ import (
 	"github.com/ian-kent/go-log/levels"
 )
 
+// Logger represents a logger
 type Logger interface {
 	Level() levels.LogLevel
 	Name() string
@@ -35,7 +36,6 @@ type Logger interface {
 }
 
 type logger struct {
-	Logger
 	level       levels.LogLevel
 	name        string
 	enabled     map[levels.LogLevel]bool
@@ -45,12 +45,14 @@ type logger struct {
 	ExitOnFatal bool
 }
 
+// Appender represents a log appender
 type Appender interface {
 	Write(level levels.LogLevel, message string, args ...interface{})
 	SetLayout(layout layout.Layout)
 	Layout() layout.Layout
 }
 
+// New returns a new Logger
 func New(name string) Logger {
 	l := Logger(&logger{
 		level:       levels.DEBUG,
@@ -185,9 +187,17 @@ func (l *logger) FullName() string {
 	return n
 }
 
+func (l *logger) Children() []Logger {
+	return l.children
+}
+
+func (l *logger) Parent() Logger {
+	return l.parent
+}
+
 func (l *logger) SetLevel(level levels.LogLevel) {
 	l.level = level
-	for k, _ := range levels.LogLevelsToString {
+	for k := range levels.LogLevelsToString {
 		if k <= level {
 			l.enabled[k] = true
 		} else {
