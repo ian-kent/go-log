@@ -175,6 +175,11 @@ pattern format similar to log4j:
 | %p   | Priority - the log level
 | %r   | ms since logger was created
 
+In order to set customizable pattern, you need to import "github.com/ian-kent/go-log/layout" using this:
+```
+import "github.com/ian-kent/go-log/layout"
+```
+
 ### Logger inheritance
 
 Loggers are namespaced with a ```.```, following similar rules to Log4j.
