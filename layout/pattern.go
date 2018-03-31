@@ -47,7 +47,7 @@ func Pattern(pattern string) *patternLayout {
 }
 
 func getCaller() *caller {
-	pc, file, line, ok := runtime.Caller(2)
+	pc, file, line, ok := runtime.Caller(6)
 
 	// TODO feels nasty?
 	dir, fn := filepath.Split(file)
